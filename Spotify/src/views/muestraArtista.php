@@ -65,7 +65,7 @@ else:
                     </div>
                     <div class="col-md-8">
                         <?php
-                        require 'muestraListadoAlbumes.php';
+                        require 'muestraListadoAlbumesArtistas.php';
                         if ($limite == 5):
                             print '<a href="artista/' . $infoArtista['id'] . '/50" class="btn btn-info" role="button">';
                             print 'Más resultados &raquo;</a>';
