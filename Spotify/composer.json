@@ -1,0 +1,21 @@
+{
+    "name": "miw/ejemplo-rest-dbal-bootstrap",
+    "description": "MiW: Práctica de PHP 2014",
+    "version": "0.4.2-dev",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Javier Gil",
+            "homepage": "http://www.etsisi.upm.es/",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "": "src/" }
+    },
+    "require": {
+        "doctrine/dbal": ">= 2.4.0",
+        "symfony/routing": "~2.6"
+    }
+}
