@@ -75,8 +75,10 @@ function mostrarArtistaAction($artistaId, $limite = 5)
  */
 function mostrarAlbumAction($albumId)
 {
+    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     $infoAlbum = datosExternos::obtenerAlbum($albumId);
     $temas = $infoAlbum['tracks']['items'];
+    $favoritos = datosLocales::verificaFavortio($id_user,$albumId);
 
     require 'views/muestraAlbum.php';
 }
@@ -87,24 +89,33 @@ function mostrarAlbumAction($albumId)
  */
 function mostrarFavoritosAction($tipo)
 {
-    $favoritos = [];
+    $favoritos_arr = [];
 
-    if ($tipo == 'artistas') {
-        $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
-        $favoritosArtista = datosLocales::obtenerFavoritosArtista($id_user);
-        foreach ($favoritosArtista as $favoritosArtista) {
-            array_push($favoritos, datosExternos::obtenerArtista($favoritosArtista['id_recurso']));
+    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+    $favoritos_obtener = datosLocales::obtenerFavoritos($id_user, $tipo);
+
+    if ($tipo == 'artistas'){
+        foreach ($favoritos_obtener as $favoritos) {
+            array_push($favoritos_arr, datosExternos::obtenerArtista($favoritos['id_recurso']));
         }
         require 'views/muestraFavoritosArtistas.php';
+    }
+    elseif ($tipo == 'albumes'){
+    foreach ($favoritos_obtener as $favoritos) {
+        array_push($favoritos_arr, datosExternos::obtenerAlbum($favoritos['id_recurso']));
+    }
+        require 'views/muestraFavoritosAlbumes.php';
     }
 }
 
 function gestionarFavoritosAction($tipo, $id_recurso){
-    if ($tipo == 'artistas') {
-        $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
-        datosLocales::gestionaFavoritosArtista($id_user, $id_recurso);
+    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+    datosLocales::gestionaFavoritos($id_user, $id_recurso, $tipo);
+
+    if ($tipo == 'artistas')
         header("Location: ".URL_BASE."artista/".$id_recurso);
-    }
+    elseif ($tipo == 'albumes')
+        header("Location: ".URL_BASE."album/".$id_recurso);
 }
 
 

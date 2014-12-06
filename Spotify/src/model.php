@@ -270,11 +270,11 @@ class datosLocales
      * @param string $usuario_id: El id del usuario a solicitar artistas
      * favoritos.
      */
-    public static function obtenerFavoritosArtista($usuario_id)
+    public static function obtenerFavoritos($usuario_id, $tipo)
     {
         self::getInstance();
 
-        $resultado = self::$idDB->query("SELECT * FROM favoritos WHERE id_usuario='".$usuario_id."'");
+        $resultado = self::$idDB->query("SELECT * FROM favoritos WHERE id_usuario='".$usuario_id."' and tipo_recurso='".$tipo."'");
         return $resultado->fetchAll();
     }
 
@@ -284,12 +284,12 @@ class datosLocales
      * @param $usuario_id Usuario que se encuentra logeado.
      * @param $recurso_id id del artista a gestionar.
      */
-    public static function gestionaFavoritosArtista($usuario_id, $recurso_id)
+    public static function gestionaFavoritos($usuario_id, $recurso_id, $tipo)
     {
         self::getInstance();
         $datos = array(
             'id_recurso' => $recurso_id,
-            'tipo_recurso' => "artista",
+            'tipo_recurso' => $tipo,
             'id_usuario' => $usuario_id
         );
         if(!self:: verificaFavortio($usuario_id, $recurso_id)){

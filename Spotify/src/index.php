@@ -56,7 +56,10 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
                             mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'albumes': # /favoritos/albumes
-                        mostrarFavoritosAction($peticion[2]);
+                        if(isset($peticion[3]))
+                            gestionarFavoritosAction($peticion[2], $peticion[4]);
+                        else
+                            mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'temas': # /favoritos/temas
                         mostrarFavoritosAction($peticion[2]);

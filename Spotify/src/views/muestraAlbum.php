@@ -39,8 +39,15 @@ else:
                 <h1>
                     <small><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Álbum:</small>
                     <mark><?= $infoAlbum['name'] ?></mark>
-                    <a href="favorito/album/nuevo/<?= $infoAlbum['id'] ?>">
-                        <span class="glyphicon glyphicon-star-empty" aria-hidden="true" title="Marcar Favorito"></span>
+                    <a href="favoritos/albumes/nuevo/<?= $infoAlbum['id'] ?>">
+                        <?php
+                        if($favoritos){
+                            print '<span class="glyphicon glyphicon-star" aria-hidden="true" title="Desmarcar Favorito"></span>';
+                        }
+                        else{
+                            print '<span class="glyphicon glyphicon-star-empty" aria-hidden="true" title="Marcar Favorito"></span>';
+                        }
+                        ?>
                     </a>
                     <br>
                     <small>Artista: <a

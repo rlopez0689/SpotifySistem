@@ -1,4 +1,4 @@
-<?php // views/muestraListadoArtistas.php
+<?php // views/muestraListadoAlbumes.php
 
 $titulo = 'intérpretes encontrados';
 
@@ -10,36 +10,32 @@ ob_start();
             <div class="panel-heading">
                 <h1>
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    Favoritos:
-                    <small>Intérptetes</small>
+                    Albumes:
+                    <small>Resultado de la búsqueda</small>
                 </h1>
-                <p class="lead">Lista de tus artistas favoritos.</p>
+                <p class="lead">Resultados de la búsqueda de sus albumes preferidos.</p>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
                     <?php
                     if (count($favoritos_arr) > 0):
-                        // Hay artistas
+                        // Hay albumes
                         print '<div class="panel panel-default">';
                         print '  <table class="table table-striped table-condensed">';
-                        foreach ($favoritos_arr as $artista) {
-                            // var_dump($artista);
-                            if (count($artista['images']) > 2) {
-                                $imagen = $artista['images'][2]['url'];
+                        foreach ($favoritos_arr as $album) {
+                            if (count($album['images']) > 2) {
+                                $imagen = $album['images'][2]['url'];
                             } else {
                                 $imagen = '';
                             }
-                            // var_dump($artista);
-                            $popularidad = sprintf("%02d", $artista['popularity']);
-                            $name = $artista['name'];
-                            $id = $artista['id'];
+                            $name = $album['name'];
+                            $id = $album['id'];
                             print <<< ____________________MARCA_FINAL
                     <tr>
                       <td>
-                        <a href='artista/$id'>
+                        <a href='album/$id'>
                           <button class="btn btn-primary" type="button">
                             <img src='$imagen' width='64' height='64' alt='Imagen $name' title='$name'>
-                            <span class="badge" title="Popularidad">$popularidad</span>
                           </button>
                         </a>
                       </td>
@@ -59,7 +55,7 @@ ____________________MARCA_FINAL;
                   <h4>¡No se han encontrado resultados!</h4>
                 </div>
                 <p>
-                  <a href="artistas">
+                  <a href="albumes">
                     <button type="button" class="btn btn-primary btn-lg">Nueva Búsqueda</button>
                   </a>
                 </p>
@@ -69,9 +65,7 @@ ________________MARCA_FINAL;
                 </div>
             </div>
         </div>
-
     </div>
-
 <?php
 
 $contenido = ob_get_clean();
