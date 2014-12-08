@@ -69,7 +69,7 @@ else:
                     </div>
                     <div class="col-md-8">
                         <?php
-                        require 'muestraListadoTemas.php';
+                        require 'muestraListadoTemasAlbumes.php';
                         ?>
                     </div>
                 </div>

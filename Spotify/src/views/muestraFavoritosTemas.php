@@ -1,4 +1,4 @@
-<?php // views/muestraListadoTemas.php
+<?php // views/muestraListadoAlbumes.php
 
 $titulo = 'intérpretes encontrados';
 
@@ -18,19 +18,16 @@ ob_start();
             <div class="panel-body">
                 <div class="table-responsive">
                     <?php
-                    if (count($temas['tracks']['items']) > 0):
+                    if (count($favoritos_arr) > 0):
                         // Hay temas
                         print '<div class="panel panel-default">';
                         print '  <table class="table table-striped table-condensed">';
-                        foreach ($temas['tracks']['items'] as $tema) {
-                            // var_dump($artista);
+                        foreach ($favoritos_arr as $tema) {
                             if (count($tema['album']['images']) > 2) {
                                 $imagen = $tema['album']['images'][2]['url'];
                             } else {
                                 $imagen = '';
                             }
-                            // var_dump($artista);
-                            $popularidad = sprintf("%02d", $tema['popularity']);
                             $name = $tema['name'];
                             $id = $tema['id'];
                             print <<< ____________________MARCA_FINAL
@@ -39,7 +36,6 @@ ob_start();
                         <a href='tema/$id'>
                           <button class="btn btn-primary" type="button">
                             <img src='$imagen' width='64' height='64' alt='Imagen $name' title='$name'>
-                            <span class="badge" title="Popularidad">$popularidad</span>
                           </button>
                         </a>
                       </td>
@@ -69,9 +65,7 @@ ________________MARCA_FINAL;
                 </div>
             </div>
         </div>
-
     </div>
-
 <?php
 
 $contenido = ob_get_clean();

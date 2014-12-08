@@ -37,12 +37,29 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             endif;
             break;
 
+        case 'albumes': # /artistas
+            buscaAlbumesAction();
+            break;
+
         case 'album': # /album/{id}
             if (!empty($peticion[2])):
                 // El segundo parámetro (id) es el Id del álbum
                 mostrarAlbumAction($peticion[2]);
             else:
-                buscaAlbumesAction();
+                principalAction();
+            endif;
+            break;
+
+        case 'temas': # /artistas
+            buscaTemasAction();
+            break;
+
+        case 'tema': # /album/{id}
+            if (!empty($peticion[2])):
+                // El segundo parámetro (id) es el Id del álbum
+                mostrarTemaAction($peticion[2]);
+            else:
+                principalAction();
             endif;
             break;
 
@@ -62,7 +79,10 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
                             mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'temas': # /favoritos/temas
-                        mostrarFavoritosAction($peticion[2]);
+                        if(isset($peticion[3]))
+                            gestionarFavoritosAction($peticion[2], $peticion[4]);
+                        else
+                            mostrarFavoritosAction($peticion[2]);
                         break;
                     default :
                         sinImplementarAction(filter_input(INPUT_SERVER, 'PATH_INFO'));
@@ -114,6 +134,14 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
         case 'buscaAlbum': # /buscaArtista artista={string}
             if (filter_has_var(INPUT_POST, 'album')):
                 buscaAlbumAction(filter_input(INPUT_POST, 'album'));
+            else:
+                principalAction();
+            endif;
+            break;
+
+        case 'buscaTema': # /buscaArtista artista={string}
+            if (filter_has_var(INPUT_POST, 'tema')):
+                buscaTemaAction(filter_input(INPUT_POST, 'tema'));
             else:
                 principalAction();
             endif;

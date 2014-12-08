@@ -40,7 +40,7 @@
             <ul class="nav nav-tabs">
                 <li><a href='artistas'><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Intérpretes</a>
                 </li>
-                <li><a href='album'><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Álbumes</a>
+                <li><a href='albumes'><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Álbumes</a>
                 </li>
                 <li><a href='temas'><span class="glyphicon glyphicon-music" aria-hidden="true"></span> Temas</a></li>
                 <li class="dropdown">

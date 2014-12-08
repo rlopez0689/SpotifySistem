@@ -56,6 +56,25 @@ function buscaAlbumAction($album)
 }
 
 /**
+ * Muestra el formulario para buscar un tema
+ */
+function buscaTemasAction()
+{
+    require 'views/buscaTema.php';
+}
+
+/**
+ * Procesa el formulario para buscar un tema concreto
+ * Busca un tema en Spotify y muestra los resultados
+ * @param string $tema
+ */
+function buscaTemaAction($tema)
+{
+    $temas = datosExternos::buscarTema($tema);
+    require 'views/muestraListadoTemas.php';
+}
+
+/**
  * Muestra la información de un artista identificado por $artistaId
  * @param string $artistaId Identificador del artista en Spotify
  */
@@ -71,6 +90,8 @@ function mostrarArtistaAction($artistaId, $limite = 5)
 
 /**
  * Muestra la información de un álbum
+ * A los tracks se le agrega un nuevo campo 'favorito', el cual es 0 si NO se encuentra en favoritos
+ * 1 si se encuentra.
  * @param string $albumId Identificador del álbum en Spotify
  */
 function mostrarAlbumAction($albumId)
@@ -78,9 +99,37 @@ function mostrarAlbumAction($albumId)
     $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     $infoAlbum = datosExternos::obtenerAlbum($albumId);
     $temas = $infoAlbum['tracks']['items'];
+
+    for($i=0;$i<count($temas);$i++){
+        $temas[$i]['favorito'] = 0;
+        if(datosLocales::verificaFavortio($id_user,$temas[$i]['id']))
+            $temas[$i]['favorito'] = 1;
+    }
     $favoritos = datosLocales::verificaFavortio($id_user,$albumId);
 
     require 'views/muestraAlbum.php';
+}
+
+/**
+ * Muestra la información de un tema
+ * Al tema se le agrega el campo 'favorito', 0 si NO se encuentra en favoritos, 1 si se encuentra.
+ * @param string $albumId Identificador del álbum en Spotify
+ */
+function mostrarTemaAction($temaId)
+{
+    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+    $tema = datosExternos::obtenerTema($temaId);
+    $tema['favorito'] = 0;
+    if(datosLocales::verificaFavortio($id_user,$tema['id']))
+        $tema['favorito'] = 1;
+    $infoAlbum = $tema['album'];
+    $artist = $tema['artists'];
+    $favorito_album = datosLocales::verificaFavortio($id_user,$tema['album']['id']);
+
+    $temas= [$tema];
+
+
+    require 'views/muestraTema.php';
 }
 
 /**
@@ -101,10 +150,16 @@ function mostrarFavoritosAction($tipo)
         require 'views/muestraFavoritosArtistas.php';
     }
     elseif ($tipo == 'albumes'){
-    foreach ($favoritos_obtener as $favoritos) {
-        array_push($favoritos_arr, datosExternos::obtenerAlbum($favoritos['id_recurso']));
-    }
+        foreach ($favoritos_obtener as $favoritos) {
+            array_push($favoritos_arr, datosExternos::obtenerAlbum($favoritos['id_recurso']));
+        }
         require 'views/muestraFavoritosAlbumes.php';
+    }
+    elseif ($tipo == 'temas'){
+        foreach ($favoritos_obtener as $favoritos) {
+            array_push($favoritos_arr, datosExternos::obtenerTema($favoritos['id_recurso']));
+        }
+        require 'views/muestraFavoritosTemas.php';
     }
 }
 
@@ -116,6 +171,8 @@ function gestionarFavoritosAction($tipo, $id_recurso){
         header("Location: ".URL_BASE."artista/".$id_recurso);
     elseif ($tipo == 'albumes')
         header("Location: ".URL_BASE."album/".$id_recurso);
+    elseif ($tipo == 'temas')
+        header("Location: ".URL_BASE."tema/".$id_recurso);
 }
 
 

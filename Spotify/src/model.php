@@ -76,6 +76,36 @@ class datosExternos
     }
 
     /**
+     * Obtiene un listado de albumes coincidentes con la cadena $album
+     * @param string $album Cadena de caracteres
+     * @return array Resultado de la búsqueda
+     * @link https://developer.spotify.com/web-api/search-item/ API Info
+     */
+    public static function buscarTema($tema)
+    {
+        $peticion = SPOTIFY_URL_API . '/v1/search?q=' . urlencode($tema) . '&type=track&market=ES';
+        $datos = @file_get_contents($peticion);
+        $temas = json_decode($datos, true);
+
+        return $temas;
+    }
+
+    /**
+     * Obtiene la información de un álbum concreto (identificado por $albumId)
+     * @param string $albumId Identificador del álbum en Spotify
+     * @return array Resultado de la búsqueda
+     * @link https://developer.spotify.com/web-api/get-album/ API Info
+     */
+    public static function obtenerTema($albumId)
+    {
+        $peticion = SPOTIFY_URL_API . '/v1/tracks/' . $albumId;
+        $datos = @file_get_contents($peticion);
+        $info = json_decode($datos, true);
+
+        return $info;
+    }
+
+    /**
      * Obtiene el catálogo de álbumes de un artista en Spotify
      * @param string $artistaId Identificador del artista en Spotify
      * @param integer $limite El límite debe estar entre 1 y 50
@@ -269,6 +299,7 @@ class datosLocales
      *
      * @param string $usuario_id: El id del usuario a solicitar artistas
      * favoritos.
+     * @param string $tipo: El tipo de favorito--Artista, Album o tema.
      */
     public static function obtenerFavoritos($usuario_id, $tipo)
     {
@@ -283,6 +314,7 @@ class datosLocales
      * elimina el artista de favoritos.
      * @param $usuario_id Usuario que se encuentra logeado.
      * @param $recurso_id id del artista a gestionar.
+     * @param string $tipo: El tipo de favorito--Artista, Album o tema.
      */
     public static function gestionaFavoritos($usuario_id, $recurso_id, $tipo)
     {
