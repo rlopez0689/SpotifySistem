@@ -43,6 +43,10 @@
                 <li><a href='albumes'><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Álbumes</a>
                 </li>
                 <li><a href='temas'><span class="glyphicon glyphicon-music" aria-hidden="true"></span> Temas</a></li>
+                <?php
+                // Si está registrado -> desplegable favoritos
+                if (isset($_SESSION['usuario'])):
+                ?>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span
                             class="glyphicon glyphicon-star" aria-hidden="true"></span> Favoritos <span
@@ -56,6 +60,7 @@
                         <!-- li><a href="#">Separated link</a></-->
                     </ul>
                 </li>
+                <?php endif; ?>
                 <?php
                 // Si está registrado y es administrador -> desplegable de gestión de usuarios
                 if (isset($_SESSION['usuario']) && $_SESSION['esAdmin']):
