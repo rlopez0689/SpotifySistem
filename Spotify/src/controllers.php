@@ -100,12 +100,13 @@ function mostrarAlbumAction($albumId)
     $infoAlbum = datosExternos::obtenerAlbum($albumId);
     $temas = $infoAlbum['tracks']['items'];
 
-    for($i=0;$i<count($temas);$i++){
+    for($i=0;$i<count($temas);$i++){//Temas favorito
         $temas[$i]['favorito'] = 0;
         if(datosLocales::verificaFavortio($id_user,$temas[$i]['id']))
             $temas[$i]['favorito'] = 1;
     }
-    $favoritos = datosLocales::verificaFavortio($id_user,$albumId);
+
+    $favoritos = datosLocales::verificaFavortio($id_user,$albumId);//Album favorito
 
     require 'views/muestraAlbum.php';
 }
@@ -119,9 +120,11 @@ function mostrarTemaAction($temaId)
 {
     $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     $tema = datosExternos::obtenerTema($temaId);
+
     $tema['favorito'] = 0;
     if(datosLocales::verificaFavortio($id_user,$tema['id']))
         $tema['favorito'] = 1;
+
     $infoAlbum = $tema['album'];
     $artist = $tema['artists'];
     $favorito_album = datosLocales::verificaFavortio($id_user,$tema['album']['id']);
@@ -175,6 +178,18 @@ function gestionarFavoritosAction($tipo, $id_recurso){
         header("Location: ".URL_BASE."tema/".$id_recurso);
 }
 
+function eliminaFavoritosAction($tipo, $id_recurso){
+    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+    datosLocales::gestionaFavoritos($id_user, $id_recurso, $tipo);
+    echo $tipo;
+    if ($tipo == 'artistas')
+        header("Location: ".URL_BASE."favoritos/artistas");
+    elseif ($tipo == 'albumes')
+        header("Location: ".URL_BASE."favoritos/albumes");
+    elseif ($tipo == 'temas')
+        header("Location: ".URL_BASE."favoritos/temas");
+}
+
 
 /**
  * Comprueba si el usuario y la contraseña son correctos
@@ -191,10 +206,8 @@ function loginAction($usuario, $pclave)
         $_SESSION['esAdmin'] = ($datos['esAdmin'] === '1');
         $resultado = TRUE;
         // var_dump($_SESSION);
-    } else {
+    } else
         $resultado = FALSE;
-    }
-
 
     return $resultado;
 }
@@ -216,6 +229,7 @@ function logoutAction()
 function listadoUsuariosAction()
 {
     $usuarios = datosLocales::recupera_todos_usuarios();
+    $usuario_log = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     require 'views/muestraListadoUsuarios.php';
 }
 
@@ -234,6 +248,15 @@ function muestraNuevoUsuarioAction()
 function insertarNuevoUsuarioAction($usuario)
 {
     @datosLocales::inserta_usuario($usuario['username'], $usuario['password'], $usuario['esAdmin'], $usuario['email']);
+    listadoUsuariosAction();
+}
+
+/**
+ * elimina un usuario y muestra el listado de usuarios
+ * @param type $usuario
+ */
+function eliminarUsuarioAction($usuario){
+    @datosLocales::borrar_usuario($usuario);
     listadoUsuariosAction();
 }
 

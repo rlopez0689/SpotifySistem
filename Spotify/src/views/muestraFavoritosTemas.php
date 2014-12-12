@@ -33,6 +33,7 @@ ob_start();
                             print <<< ____________________MARCA_FINAL
                     <tr>
                       <td>
+                        <a href="favoritos/elimina/temas/$id"><span class="glyphicon glyphicon-remove"></span></a>
                         <a href='tema/$id'>
                           <button class="btn btn-primary" type="button">
                             <img src='$imagen' width='64' height='64' alt='Imagen $name' title='$name'>

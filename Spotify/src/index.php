@@ -9,7 +9,10 @@ require 'config.php';
 require 'controllers.php';
 
 
-$peticion = explode('/', filter_input(INPUT_SERVER, 'PATH_INFO'));
+if(filter_input(INPUT_SERVER, 'PATH_INFO')=="")
+    $peticion = explode('/', filter_input(INPUT_SERVER, 'PATH_INFO')."/");
+else
+    $peticion = explode('/', filter_input(INPUT_SERVER, 'PATH_INFO'));
 
 if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
     switch ($peticion[1]) {
@@ -84,6 +87,9 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
                         else
                             mostrarFavoritosAction($peticion[2]);
                         break;
+                    case 'elimina': #/favoritos/elimina/tipo/id
+                        if(isset($peticion[3]))
+                            eliminaFavoritosAction($peticion[3], $peticion[4]);
                     default :
                         sinImplementarAction(filter_input(INPUT_SERVER, 'PATH_INFO'));
                         break;
@@ -106,6 +112,9 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
                         break;
                     case 'nuevo': # /usuario/nuevo
                         muestraNuevoUsuarioAction();
+                        break;
+                    case 'eliminar': # /usuario/nuevo
+                        eliminarUsuarioAction($peticion[3]);
                         break;
                     default :
                         sinImplementarAction(filter_input(INPUT_SERVER, 'PATH_INFO'));

@@ -26,6 +26,10 @@ ob_start();
                         foreach ($usuarios as $usuario) {
                             // var_dump($usuario);
                             $name = $usuario['username'];
+                            if ($usuario['id']!= $usuario_log)
+                                $delete = "<a href='usuario/eliminar/$name' title='Eliminar usuario'><span class='glyphicon glyphicon-trash' aria-hidden='true'> </span></a>";
+                            else
+                                $delete = "";
                             if ($usuario['esAdmin'] == 1):
                                 $esAdmin = '<span class="glyphicon glyphicon-ok verde" aria-hidden="true"></span>';
                             else:
@@ -42,11 +46,7 @@ ob_start();
                       <td>$esAdmin</td> 
                       <td>$usuario[email]</td>
                       <td>$usuario[create_time]</td>
-                      <td>
-                        <a href='usuario/eliminar/$name' title='Eliminar usuario'>
-                          <span class="glyphicon glyphicon-trash" aria-hidden="true"> </span>
-                        </a>
-                      </td>
+                      <td>$delete</td>
                     </tr>
 ____________________MARCA_FINAL;
                         }
