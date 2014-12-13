@@ -20,8 +20,14 @@ function duracion($milisegundos)
     // var_dump($temas);
     foreach ($temas as $indice => $tema) {
         $clase = "-empty";
-        if($tema['favorito']==1){
-            $clase = "";
+        $favorito = "";
+        if(isset($_SESSION['usuario'])){
+            if($tema['favorito']==1){
+                $favorito='<a href="/favoritos/temas/nuevo/'.$tema["id"].'"><span class="glyphicon glyphicon-star" aria-hidden="true" title="Marcar Favorito"></span></a>';
+            }
+            else{
+                $favorito='<a href="/favoritos/temas/nuevo/'.$tema["id"].'"><span class="glyphicon glyphicon-star-empty" aria-hidden="true" title="Marcar Favorito"></span></a>';
+            }
         }
         $numtema = sprintf("%02d", $tema['track_number']);
         $numdisco = sprintf("%02d", $tema['disc_number']);
@@ -55,9 +61,7 @@ ________MARCA;
                 <div class="panel-body">
                   <div class='row'>
                     <div class='col-sm-1'>
-                      <a href="/favoritos/temas/nuevo/$tema[id]">
-                        <span class="glyphicon glyphicon-star$clase" aria-hidden="true" title="Marcar Favorito"></span>
-                      </a>
+                      $favorito
                      </div>
                      <div class='col-sm-3'>
                        Duración: $duracion
