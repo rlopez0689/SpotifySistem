@@ -41,7 +41,6 @@ class datosExternos
         $peticion = SPOTIFY_URL_API . '/v1/artists/' . $artistaId;
         $datos = @file_get_contents($peticion);
         $info = json_decode($datos, true);
-
         return $info;
     }
 
@@ -319,16 +318,27 @@ class datosLocales
     public static function gestionaFavoritos($usuario_id, $recurso_id, $tipo)
     {
         self::getInstance();
-        $datos = array(
-            'id_recurso' => $recurso_id,
-            'tipo_recurso' => $tipo,
-            'id_usuario' => $usuario_id
-        );
-        if(!self:: verificaFavortio($usuario_id, $recurso_id)){
-            self::$idDB->insert('favoritos', $datos);
-        }
-        else{
-            self::$idDB->delete('favoritos', $datos);
+
+        //Se verifica que el id exista
+        $verifica="";
+        if($tipo=="artistas")
+            $verifica = datosExternos::obtenerArtista($recurso_id);
+        elseif($tipo=="temas")
+            $verifica = datosExternos::obtenerTema($recurso_id);
+        elseif($tipo=="albumes")
+            $verifica = datosExternos::obtenerAlbum($recurso_id);
+
+        if($verifica!="") {
+            $datos = array(
+                'id_recurso' => $recurso_id,
+                'tipo_recurso' => $tipo,
+                'id_usuario' => $usuario_id
+            );
+            if (!self:: verificaFavortio($usuario_id, $recurso_id)) {
+                self::$idDB->insert('favoritos', $datos);
+            } else {
+                self::$idDB->delete('favoritos', $datos);
+            }
         }
     }
 

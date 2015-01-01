@@ -41,11 +41,12 @@ else:
                     <mark><?= $infoAlbum['name'] ?></mark>
                     <a href="favoritos/albumes/nuevo/<?= $infoAlbum['id'] ?>">
                         <?php
-                        if($favoritos){
-                            print '<span class="glyphicon glyphicon-star" aria-hidden="true" title="Desmarcar Favorito"></span>';
-                        }
-                        else{
-                            print '<span class="glyphicon glyphicon-star-empty" aria-hidden="true" title="Marcar Favorito"></span>';
+                        if(isset($_SESSION['usuario'])) {
+                            if ($favoritos) {
+                                print '<span class="glyphicon glyphicon-star" aria-hidden="true" title="Desmarcar Favorito"></span>';
+                            } else {
+                                print '<span class="glyphicon glyphicon-star-empty" aria-hidden="true" title="Marcar Favorito"></span>';
+                            }
                         }
                         ?>
                     </a>

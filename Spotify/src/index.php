@@ -40,7 +40,7 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             endif;
             break;
 
-        case 'albumes': # /artistas
+        case 'albumes': # /albumes
             buscaAlbumesAction();
             break;
 
@@ -53,11 +53,11 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             endif;
             break;
 
-        case 'temas': # /artistas
+        case 'temas': # /temas
             buscaTemasAction();
             break;
 
-        case 'tema': # /album/{id}
+        case 'tema': # /tema/{id}
             if (!empty($peticion[2])):
                 // El segundo parámetro (id) es el Id del álbum
                 mostrarTemaAction($peticion[2]);
@@ -70,21 +70,21 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             if (isset($_SESSION['usuario'])):
                 switch ($peticion[2]) {
                     case 'artistas': # /favoritos/artistas
-                        if(isset($peticion[3]))
+                        if(isset($peticion[3])) # /favoritos/artistas/nuevo/id
                             gestionarFavoritosAction($peticion[2], $peticion[4]);
-                        else
+                        else # /favoritos/artistas
                             mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'albumes': # /favoritos/albumes
-                        if(isset($peticion[3]))
+                        if(isset($peticion[3])) # /favoritos/albumes/nuevo/id
                             gestionarFavoritosAction($peticion[2], $peticion[4]);
-                        else
+                        else # /favoritos/albumes
                             mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'temas': # /favoritos/temas
-                        if(isset($peticion[3]))
+                        if(isset($peticion[3])) # /favoritos/temas/nuevo/id
                             gestionarFavoritosAction($peticion[2], $peticion[4]);
-                        else
+                        else # /favoritos/temas
                             mostrarFavoritosAction($peticion[2]);
                         break;
                     case 'elimina': #/favoritos/elimina/tipo/id
@@ -113,7 +113,7 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
                     case 'nuevo': # /usuario/nuevo
                         muestraNuevoUsuarioAction();
                         break;
-                    case 'eliminar': # /usuario/nuevo
+                    case 'eliminar': # /usuario/eliminar/id
                         eliminarUsuarioAction($peticion[3]);
                         break;
                     default :
@@ -140,7 +140,7 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             endif;
             break;
 
-        case 'buscaAlbum': # /buscaArtista artista={string}
+        case 'buscaAlbum': # /buscaAlbum artista={string}
             if (filter_has_var(INPUT_POST, 'album')):
                 buscaAlbumAction(filter_input(INPUT_POST, 'album'));
             else:
@@ -148,7 +148,7 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET') {
             endif;
             break;
 
-        case 'buscaTema': # /buscaArtista artista={string}
+        case 'buscaTema': # /buscaTema artista={string}
             if (filter_has_var(INPUT_POST, 'tema')):
                 buscaTemaAction(filter_input(INPUT_POST, 'tema'));
             else:

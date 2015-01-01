@@ -37,7 +37,7 @@ function buscaArtistaAction($artista)
 }
 
 /**
- * Muestra el formulario para buscar un artista
+ * Muestra el formulario para buscar un album
  */
 function buscaAlbumesAction()
 {
@@ -80,10 +80,12 @@ function buscaTemaAction($tema)
  */
 function mostrarArtistaAction($artistaId, $limite = 5)
 {
-    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+    if(isset($_SESSION['usuario'])){
+        $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+        $favoritos = datosLocales::verificaFavortio($id_user,$artistaId);
+    }
     $infoArtista = datosExternos::obtenerArtista($artistaId);
     $albumes = datosExternos::getArtistaAlbumes($artistaId, $limite);
-    $favoritos = datosLocales::verificaFavortio($id_user,$artistaId);
     require 'views/muestraArtista.php';
 }
 
@@ -96,18 +98,18 @@ function mostrarArtistaAction($artistaId, $limite = 5)
  */
 function mostrarAlbumAction($albumId)
 {
-    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     $infoAlbum = datosExternos::obtenerAlbum($albumId);
     $temas = $infoAlbum['tracks']['items'];
 
-    for($i=0;$i<count($temas);$i++){//Temas favorito
-        $temas[$i]['favorito'] = 0;
-        if(datosLocales::verificaFavortio($id_user,$temas[$i]['id']))
-            $temas[$i]['favorito'] = 1;
+    if(isset($_SESSION['usuario'])) {
+        $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+        for ($i = 0; $i < count($temas); $i++) {//Temas favorito
+            $temas[$i]['favorito'] = 0;
+            if (datosLocales::verificaFavortio($id_user, $temas[$i]['id']))
+                $temas[$i]['favorito'] = 1;
+        }
+        $favoritos = datosLocales::verificaFavortio($id_user, $albumId);//Album favorito
     }
-
-    $favoritos = datosLocales::verificaFavortio($id_user,$albumId);//Album favorito
-
     require 'views/muestraAlbum.php';
 }
 
@@ -118,17 +120,18 @@ function mostrarAlbumAction($albumId)
  */
 function mostrarTemaAction($temaId)
 {
-    $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+
+
     $tema = datosExternos::obtenerTema($temaId);
-
-    $tema['favorito'] = 0;
-    if(datosLocales::verificaFavortio($id_user,$tema['id']))
-        $tema['favorito'] = 1;
-
     $infoAlbum = $tema['album'];
     $artist = $tema['artists'];
-    $favorito_album = datosLocales::verificaFavortio($id_user,$tema['album']['id']);
-
+    if(isset($_SESSION['usuario'])){
+        $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
+        $tema['favorito'] = 0;
+        if(datosLocales::verificaFavortio($id_user,$tema['id']))
+            $tema['favorito'] = 1;
+        $favorito_album = datosLocales::verificaFavortio($id_user,$tema['album']['id']);
+    }
     $temas= [$tema];
 
 
@@ -166,10 +169,15 @@ function mostrarFavoritosAction($tipo)
     }
 }
 
+/**
+ * Da de alta un favorito en caso de que no exista, en caso contrario lo elimina
+ * @param string $tipo : 'artistas', 'albumes', 'temas'.
+ * @param string $id_recurso : id del recurso.
+ *
+ */
 function gestionarFavoritosAction($tipo, $id_recurso){
     $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     datosLocales::gestionaFavoritos($id_user, $id_recurso, $tipo);
-
     if ($tipo == 'artistas')
         header("Location: ".URL_BASE."artista/".$id_recurso);
     elseif ($tipo == 'albumes')
@@ -181,7 +189,7 @@ function gestionarFavoritosAction($tipo, $id_recurso){
 function eliminaFavoritosAction($tipo, $id_recurso){
     $id_user = datosLocales::recupera_usuario($_SESSION['usuario'])['id'];
     datosLocales::gestionaFavoritos($id_user, $id_recurso, $tipo);
-    echo $tipo;
+
     if ($tipo == 'artistas')
         header("Location: ".URL_BASE."favoritos/artistas");
     elseif ($tipo == 'albumes')
