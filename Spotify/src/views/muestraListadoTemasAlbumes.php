@@ -35,8 +35,8 @@ function duracion($milisegundos)
         $duracion = duracion($tema['duration_ms']);
         $url_preview = $tema['preview_url'];
         $preview = <<< ________MARCA
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm" title="Escuchar">Preview</button>
-              <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel$indice" aria-hidden="true">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm$indice" title="Escuchar">Preview</button>
+              <div class="modal fade bs-example-modal-sm$indice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel$indice" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                   <div class="modal-content">
                     <video controls="" name="media">
